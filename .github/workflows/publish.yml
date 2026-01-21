@@ -1,20 +1,20 @@
-name: Publish Image to GHCR
+name: Publish Versioned Image to GHCR
 
 concurrency:
-  group: Publish
+  group: Publish Version
   cancel-in-progress: false
 
 on:
   schedule:
-    - cron: "0 15 * * *"
+    - cron: "0 0 * * SUN"
   workflow_dispatch:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: dbt-snowflake
+  IMAGE_NAME: HarperStone/dbt-snowflake
 
 jobs:
-  build-image:
+  build-publish-image:
     name: Build Image and Publish to ghcr.io
     runs-on: ubuntu-latest
     environment: Publish
@@ -31,8 +31,8 @@ jobs:
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          username: ${{ secrets.PACKAGE_PUBLISHER }}
+          password: ${{ secrets.PACKAGE_TOKEN }}
 
       - name: Extract metadata for Docker
         id: meta
@@ -45,6 +45,15 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+      
+      - name: Build and Push Docker Latest Image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: latest
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Generate Artifact Attestation
