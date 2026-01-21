@@ -3,18 +3,18 @@
 # this image gets published to GHCR for production use
 ARG py_version=3.11.2
 
-FROM python:$py_version-slim-bullseye AS base
+FROM python:$py_version AS base
 
 RUN apt-get update
 RUN apt-get dist-upgrade -y
-RUN apt-get install -y --no-install-recommends \
-  build-essential=12.9 \
-  ca-certificates=20210119 \
-  git=1:2.30.2-1+deb11u2 \
-  libpq-dev=13.18-0+deb11u1 \
-  make=4.3-4.1 \
-  openssh-client=1:8.4p1-5+deb11u3 \
-  software-properties-common=0.96.20.2-2.1
+# RUN apt-get install -y --no-install-recommends \
+#   build-essential=12.9 \
+#   ca-certificates=20210119 \
+#   git=1:2.30.2-1+deb11u2 \
+#   libpq-dev=13.18-0+deb11u1 \
+#   make=4.3-4.1 \
+#   openssh-client=1:8.4p1-5+deb11u3 \
+#   software-properties-common=0.96.20.2-2.1
 RUN apt-get clean
 RUN rm -rf \
     /var/lib/apt/lists/* \
