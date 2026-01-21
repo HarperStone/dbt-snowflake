@@ -41,8 +41,8 @@ jobs:
         run: |
           echo ${{ env.IMAGE_NAME }}
           docker --version
-          docker build --tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@latest --dockerfile Dockerfile .
-          docker push --tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@latest 
+          docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@latest .
+          docker push -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@latest 
           
 
       # - name: Extract metadata for Docker
