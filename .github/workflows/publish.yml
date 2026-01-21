@@ -5,6 +5,9 @@ concurrency:
   cancel-in-progress: false
 
 on:
+  push:
+    branches:
+      - main
   schedule:
     - cron: "0 0 * * SUN"
   workflow_dispatch:
@@ -34,31 +37,37 @@ jobs:
           username: ${{ secrets.PACKAGE_PUBLISHER }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract metadata for Docker
-        id: meta
-        uses: docker/metadata-action@v5
+      - name: Build Docker Image
+        run: |
+          echo ${{ env.IMAGE_NAME }}
+          docker --version
+          
 
-      - name: Build and Push Docker Image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+      # - name: Extract metadata for Docker
+      #   id: meta
+      #   uses: docker/metadata-action@v5
+
+      # - name: Build and Push Docker Image
+      #   uses: docker/build-push-action@v6
+      #   with:
+      #     context: .
+      #     file: ./Dockerfile
+      #     push: true
+      #     tags: ${{ steps.meta.outputs.tags }}
+      #     labels: ${{ steps.meta.outputs.labels }}
       
-      - name: Build and Push Docker Latest Image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: latest
-          labels: ${{ steps.meta.outputs.labels }}
+      # - name: Build and Push Docker Latest Image
+      #   uses: docker/build-push-action@v6
+      #   with:
+      #     context: .
+      #     file: ./Dockerfile
+      #     push: true
+      #     tags: latest
+      #     labels: ${{ steps.meta.outputs.labels }}
 
-      - name: Generate Artifact Attestation
-        uses: actions/attest-build-provenance@v3
-        with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          subject-digest: ${{ steps.meta.outputs.digest }}
-          push-to-registry: true
+      # - name: Generate Artifact Attestation
+      #   uses: actions/attest-build-provenance@v3
+      #   with:
+      #     subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+      #     subject-digest: ${{ steps.meta.outputs.digest }}
+      #     push-to-registry: true
