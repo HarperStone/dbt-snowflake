@@ -41,10 +41,9 @@ jobs:
         run: |
           echo ${{ env.IMAGE_NAME }}
           docker --version
-          export TAG="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@latest"
+          export TAG="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
           docker build -t ${TAG//"/"/-} .
-          docker push -t ${TAG//"/"/-} 
-          
+          docker push -t ${TAG//"/"/-}
 
       # - name: Extract metadata for Docker
       #   id: meta
