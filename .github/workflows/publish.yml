@@ -37,13 +37,13 @@ jobs:
           username: ${{ secrets.PACKAGE_PUBLISHER }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # - name: Build Docker Image
-      #   run: |
-      #     export TAG=$(echo "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest" | tr '[:upper:]' '[:lower:]')
-      #     echo $TAG
-      #     docker --version
-      #     docker build -t $TAG .
-      #     docker push $TAG
+      - name: Build Docker Image
+        run: |
+          export TAG=$(echo "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest" | tr '[:upper:]' '[:lower:]')
+          echo $TAG
+          docker --version
+          docker build -t $TAG .
+          docker push $TAG
 
       - name: Build and Push Versioned Image
         run: |
