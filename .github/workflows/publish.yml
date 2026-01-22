@@ -47,7 +47,7 @@ jobs:
 
       - name: Build and Push Versioned Image
         run: |
-          pip index versions dbt-snowflake
+          pip index versions dbt-snowflake | grep dbt-snowflake | grep -oE "[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}"
           # export VERSION=$(pip index versions dbt-snowflake | grep LATEST | grep -oE "[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}")
           # echo $VERSION
           # export TAG=$(echo "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:$VERSION" | tr '[:upper:]' '[:lower:]')
